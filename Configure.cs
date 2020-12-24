@@ -7,7 +7,7 @@ using System.IO;
 
 namespace SH_SemesterScoreReportFixed
 {
-    [FISCA.UDT.TableName("ischool.StudentSH_SemesterScoreReport_fixed.Configure_kcbs")]
+    [FISCA.UDT.TableName("ischool.StudentSH_SemesterScoreReport_fixed.Configure__kcbs")]
     public class Configure : FISCA.UDT.ActiveRecord
     {
         public Configure()
@@ -121,6 +121,55 @@ namespace SH_SemesterScoreReportFixed
         /// </summary>
         [FISCA.UDT.Field]
         public string FailScoreMark { get; set; }
+
+        /// <summary>
+        /// 開始日期(缺曠)
+        /// </summary>
+        [FISCA.UDT.Field]
+        public string BeginDateAttend { get; set; }
+
+        /// <summary>
+        /// 結束日期(缺曠)
+        /// </summary>
+        [FISCA.UDT.Field]
+        public string EndDateAttend { get; set; }
+
+
+        /// <summary>
+        /// 開始日期(獎)
+        /// </summary>
+        [FISCA.UDT.Field]
+        public string BeginDateMerit { get; set; }
+
+        /// <summary>
+        /// 結束日期(獎)
+        /// </summary>
+        [FISCA.UDT.Field]
+        public string EndDateMerit { get; set; }
+
+        /// <summary>
+        /// 開始日期(康橋懲戒)
+        /// </summary>
+        [FISCA.UDT.Field]
+        public string BeginDateDermit { get; set; }
+
+        /// <summary>
+        /// 結束日期(康橋懲戒)
+        /// </summary>
+        [FISCA.UDT.Field]
+        public string EndDateDermit { get; set; }
+
+        /// <summary>
+        /// 開始日期(服務學習)
+        /// </summary>
+        [FISCA.UDT.Field]
+        public string BeginDateSevice { get; set; }
+
+        /// <summary>
+        /// 結束日期(服務學習)
+        /// </summary>
+        [FISCA.UDT.Field]
+        public string EndDateSevice { get; set; }
 
 
 

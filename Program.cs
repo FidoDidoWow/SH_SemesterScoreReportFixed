@@ -514,6 +514,7 @@ namespace SH_SemesterScoreReportFixed
                     table.Columns.Add("前學期" + name);
                     table.Columns.Add("本學期" + name);
                     table.Columns.Add("學年" + name);
+                    table.Columns.Add("區間" + name);
                 }
 
                 //  動態產生學期科目與學期分項合併欄位
@@ -1091,6 +1092,9 @@ namespace SH_SemesterScoreReportFixed
                             AttendanceCountDict1 = Utility.GetAttendanceCountBySchoolYearSemester(StudRecList, SchoolYear, 1);
                         }
 
+                        // 取得區間缺曠
+                        Dictionary<string, Dictionary<string, int>> AttendanceCountDictBetween = Utility.GetAttendanceCountByDate(StudRecList, form.GetBeginDateAttend(), form.GetEndDateAttend());
+
                         List<K12.Data.PeriodMappingInfo> PeriodMappingList = K12.Data.PeriodMapping.SelectAll();
                         // 節次>類別
                         Dictionary<string, string> PeriodMappingDict = new Dictionary<string, string>();
@@ -1186,6 +1190,17 @@ namespace SH_SemesterScoreReportFixed
                                         row[keyS] = data.Value;
                                 }
                             }
+
+                            // 處理區間缺曠
+                            if (AttendanceCountDictBetween.ContainsKey(studentID))
+                            {
+                                foreach (KeyValuePair<string, int> data in AttendanceCountDictBetween[studentID])
+                                {
+                                    if (table.Columns.Contains(data.Key))
+                                        row[data.Key] = data.Value;
+                                }
+                            }
+
 
                             if (AttendanceCountDict1.ContainsKey(studentID))
                             {
@@ -3305,6 +3320,13 @@ namespace SH_SemesterScoreReportFixed
                             row["服務學習區間開始日期"] = form.GetBeginDateSevice().ToShortDateString();
                             row["服務學習區間結束日期"] = form.GetEndDateSevice().ToShortDateString();
 
+                            // 2020/12/24 應應康橋客製，所有學務資料皆為設定區間統計
+                            #region 區間統計
+
+   
+
+
+                            #endregion
 
                             #region 獎懲統計
                             int 大功 = 0;
