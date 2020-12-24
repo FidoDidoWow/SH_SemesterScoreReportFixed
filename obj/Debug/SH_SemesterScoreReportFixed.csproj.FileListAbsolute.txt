@@ -9,3 +9,14 @@ C:\Users\ED\Documents\ischool_Github\SHEvaluation\SH\SH_SemesterScoreReportFixed
 C:\Users\ED\Documents\ischool_Github\SHEvaluation\SH\SH_SemesterScoreReportFixed\obj\Debug\SH_SemesterScoreReportFixed.csproj.CoreCompileInputs.cache
 C:\Users\ED\Documents\ischool_Github\SHEvaluation\SH\SH_SemesterScoreReportFixed\obj\Debug\SH_SemesterScoreReportFixed.dll
 C:\Users\ED\Documents\ischool_Github\SHEvaluation\SH\SH_SemesterScoreReportFixed\obj\Debug\SH_SemesterScoreReportFixed.pdb
+C:\Users\ED\Documents\ischool_Github\SH_SemesterScoreReportFixed\bin\Debug\SH_SemesterScoreReportFixed.dll
+C:\Users\ED\Documents\ischool_Github\SH_SemesterScoreReportFixed\bin\Debug\SH_SemesterScoreReportFixed.pdb
+C:\Users\ED\Documents\ischool_Github\SH_SemesterScoreReportFixed\obj\Debug\SH_SemesterScoreReportFixed.csprojAssemblyReference.cache
+C:\Users\ED\Documents\ischool_Github\SH_SemesterScoreReportFixed\obj\Debug\SH_SemesterScoreReportFixed.CloneConfigure.resources
+C:\Users\ED\Documents\ischool_Github\SH_SemesterScoreReportFixed\obj\Debug\SH_SemesterScoreReportFixed.ConfigForm.resources
+C:\Users\ED\Documents\ischool_Github\SH_SemesterScoreReportFixed\obj\Debug\SH_SemesterScoreReportFixed.NewConfigure.resources
+C:\Users\ED\Documents\ischool_Github\SH_SemesterScoreReportFixed\obj\Debug\SH_SemesterScoreReportFixed.Properties.Resources.resources
+C:\Users\ED\Documents\ischool_Github\SH_SemesterScoreReportFixed\obj\Debug\SH_SemesterScoreReportFixed.csproj.GenerateResource.cache
+C:\Users\ED\Documents\ischool_Github\SH_SemesterScoreReportFixed\obj\Debug\SH_SemesterScoreReportFixed.csproj.CoreCompileInputs.cache
+C:\Users\ED\Documents\ischool_Github\SH_SemesterScoreReportFixed\obj\Debug\SH_SemesterScoreReportFixed.dll
+C:\Users\ED\Documents\ischool_Github\SH_SemesterScoreReportFixed\obj\Debug\SH_SemesterScoreReportFixed.pdb

@@ -18,7 +18,7 @@ namespace SH_SemesterScoreReportFixed
         [FISCA.MainMethod]
         public static void Main()
         {
-            var btn = K12.Presentation.NLDPanels.Student.RibbonBarItems["資料統計"]["報表"]["成績相關報表"]["期末成績通知單(固定排名)"];
+            var btn = K12.Presentation.NLDPanels.Student.RibbonBarItems["資料統計"]["報表"]["成績相關報表"]["成績通知單(康橋)"]["期末成績通知單(固定排名)(康橋懲戒)"];
             btn.Enable = false;
             K12.Presentation.NLDPanels.Student.SelectedSourceChanged += delegate
             {
@@ -28,7 +28,7 @@ namespace SH_SemesterScoreReportFixed
 
             //權限設定
             Catalog permission = RoleAclSource.Instance["學生"]["功能按鈕"];
-            permission.Add(new RibbonFeature(Permissions.期末成績通知單_固定排名, "期末成績通知單(固定排名)"));
+            permission.Add(new RibbonFeature(Permissions.期末成績通知單_固定排名, "期末成績通知單(固定排名)(康橋懲戒)"));
         }
 
         private static string GetNumber(decimal? p)

@@ -7,7 +7,7 @@ using System.IO;
 
 namespace SH_SemesterScoreReportFixed
 {
-    [FISCA.UDT.TableName("ischool.StudentSH_SemesterScoreReport_fixed.Configure")]
+    [FISCA.UDT.TableName("ischool.StudentSH_SemesterScoreReport_fixed.Configure_kcbs")]
     public class Configure : FISCA.UDT.ActiveRecord
     {
         public Configure()

@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SH_SemesterScoreReportFixed</RootNamespace>
-    <AssemblyName>SH_SemesterScoreReportFixed</AssemblyName>
+    <AssemblyName>SH_SemesterScoreReportFixed_KCBS</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
