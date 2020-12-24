@@ -257,6 +257,49 @@ namespace SH_SemesterScoreReportFixed
                         item.Checked = Configure.PrintSubjectList.Contains(item.Text);
                     }
 
+                    // 開始與結束日期
+                    DateTime dtb, dte;
+                    if (DateTime.TryParse(Configure.BeginDateAttend, out dtb))
+                        dtBeginAttend.Value = dtb;
+                    else
+                        dtBeginAttend.Value = DateTime.Now;
+
+                    if (DateTime.TryParse(Configure.EndDateAttend, out dte))
+                        dtEndAttend.Value = dte;
+                    else
+                        dtEndAttend.Value = DateTime.Now;
+
+                    if (DateTime.TryParse(Configure.BeginDateMerit, out dtb))
+                        dtBeginMerit.Value = dtb;
+                    else
+                        dtBeginMerit.Value = DateTime.Now;
+
+                    if (DateTime.TryParse(Configure.EndDateMerit, out dte))
+                        dtEndMerit.Value = dte;
+                    else
+                        dtEndMerit.Value = DateTime.Now;
+
+                    if (DateTime.TryParse(Configure.BeginDateDermit, out dtb))
+                        dtBeginDermit.Value = dtb;
+                    else
+                        dtBeginDermit.Value = DateTime.Now;
+
+                    if (DateTime.TryParse(Configure.EndDateDermit, out dte))
+                        dtEndDermit.Value = dte;
+                    else
+                        dtEndDermit.Value = DateTime.Now;
+
+                    if (DateTime.TryParse(Configure.BeginDateSevice, out dtb))
+                        dtBeginService.Value = dtb;
+                    else
+                        dtBeginService.Value = DateTime.Now;
+
+                    if (DateTime.TryParse(Configure.EndDateSevice, out dte))
+                        dtEndService.Value = dte;
+                    else
+                        dtEndService.Value = DateTime.Now;
+
+
                 }
                 else
                 {
@@ -303,6 +346,19 @@ namespace SH_SemesterScoreReportFixed
             Configure.TagRank1TagList.Clear();
             Configure.TagRank2TagList.Clear();
             Configure.RankFilterTagList.Clear();
+
+            // 儲存開始與結束日期(缺曠、獎勵、康橋懲戒、服務學習 分開儲存)
+            Configure.BeginDateAttend = dtBeginAttend.Value.ToShortDateString();
+            Configure.EndDateAttend = dtEndAttend.Value.ToShortDateString();
+
+            Configure.BeginDateMerit = dtBeginMerit.Value.ToShortDateString();
+            Configure.EndDateMerit = dtEndMerit.Value.ToShortDateString();
+
+            Configure.BeginDateDermit = dtBeginDermit.Value.ToShortDateString();
+            Configure.EndDateDermit = dtEndDermit.Value.ToShortDateString();
+
+            Configure.BeginDateSevice = dtBeginService.Value.ToShortDateString();
+            Configure.EndDateSevice = dtEndService.Value.ToShortDateString();
 
 
             Configure.Encode();
