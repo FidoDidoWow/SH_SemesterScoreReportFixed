@@ -11,15 +11,35 @@ using System.IO;
 
 namespace SH_SemesterScoreReportFixed
 {
-    public partial class ConfigForm  : FISCA.Presentation.Controls.BaseForm
+    public partial class ConfigForm : FISCA.Presentation.Controls.BaseForm
     {
         private FISCA.UDT.AccessHelper _AccessHelper = new FISCA.UDT.AccessHelper();
         private Dictionary<string, List<string>> _ExamSubjects = new Dictionary<string, List<string>>();
         private Dictionary<string, List<string>> _ExamSubjectFull = new Dictionary<string, List<string>>();
-      
+
         private List<Configure> _Configures = new List<Configure>();
         private string _DefalutSchoolYear = "";
         private string _DefaultSemester = "";
+
+        // 開始日期(缺曠)
+        private DateTime _BeginDateAttend;
+        // 結束日期(缺曠)
+        private DateTime _EndDateAttend;
+
+        // 開始日期(獎)
+        private DateTime _BeginDateMerit;
+        // 結束日期(獎)
+        private DateTime _EndDateMerit;
+
+        // 開始日期(康橋懲戒)
+        private DateTime _BeginDateDermit;
+        // 結束日期(康橋懲戒)
+        private DateTime _EndDateDermit;
+
+        // 開始日期(服務學習)
+        private DateTime _BeginDateService;
+        // 結束日期(康橋懲戒)
+        private DateTime _EndDateService;
 
         public ConfigForm()
         {
@@ -36,7 +56,7 @@ namespace SH_SemesterScoreReportFixed
                 //試別清單
                 exams = K12.Data.Exam.SelectAll();
                 bkw.ReportProgress(20);
-              
+
                 #region 整理所有試別對應科目
                 var AEIncludeRecords = K12.Data.AEInclude.SelectAll();
                 bkw.ReportProgress(30);
@@ -125,8 +145,8 @@ namespace SH_SemesterScoreReportFixed
 
                 List<string> prefix = new List<string>();
                 List<string> tag = new List<string>();
-               
-             
+
+
                 circularProgress1.Hide();
                 if (_Configures.Count > 0)
                 {
@@ -142,31 +162,31 @@ namespace SH_SemesterScoreReportFixed
 
         public Configure Configure { get; private set; }
 
-     
+
         private void ExamChanged(object sender, EventArgs e)
         {
             string key = cboSchoolYear.Text + "^^" + cboSemester.Text + "^^" +
                 (cboExam.SelectedItem == null ? "" : ((ExamRecord)cboExam.SelectedItem).ID);
-            listViewEx1.SuspendLayout();        
+            listViewEx1.SuspendLayout();
             listViewEx1.Items.Clear();
-          
+
             if (_ExamSubjectFull.ContainsKey(key))
             {
                 foreach (var subject in _ExamSubjectFull[key])
                 {
                     var i1 = listViewEx1.Items.Add(subject);
-                    
+
                     if (Configure != null && Configure.PrintSubjectList.Contains(subject))
                         i1.Checked = true;
-                  
+
                     if (_ExamSubjects.ContainsKey(key) && !_ExamSubjects[key].Contains(subject))
                     {
-                        i1.ForeColor = Color.DarkGray;                       
+                        i1.ForeColor = Color.DarkGray;
                     }
                 }
             }
             listViewEx1.ResumeLayout(true);
-         
+
         }
 
         private void cboConfigure_SelectedIndexChanged(object sender, EventArgs e)
@@ -230,13 +250,13 @@ namespace SH_SemesterScoreReportFixed
                                 break;
                             }
                         }
-                    }                  
-               
+                    }
+
                     foreach (ListViewItem item in listViewEx1.Items)
                     {
                         item.Checked = Configure.PrintSubjectList.Contains(item.Text);
                     }
-                   
+
                 }
                 else
                 {
@@ -244,11 +264,11 @@ namespace SH_SemesterScoreReportFixed
                     cboSchoolYear.SelectedIndex = -1;
                     cboSemester.SelectedIndex = -1;
                     cboExam.SelectedIndex = -1;
-                   
+
                     foreach (ListViewItem item in listViewEx1.Items)
                     {
                         item.Checked = false;
-                    }                  
+                    }
                 }
             }
         }
@@ -279,11 +299,11 @@ namespace SH_SemesterScoreReportFixed
                         Configure.PrintSubjectList.Remove(item.Text);
                 }
             }
-            
+
             Configure.TagRank1TagList.Clear();
             Configure.TagRank2TagList.Clear();
             Configure.RankFilterTagList.Clear();
-          
+
 
             Configure.Encode();
             Configure.Save();
@@ -296,6 +316,18 @@ namespace SH_SemesterScoreReportFixed
 
         private void btnPrint_Click(object sender, EventArgs e)
         {
+            _BeginDateAttend = dtBeginAttend.Value;
+            _EndDateAttend = dtEndAttend.Value;
+
+            _BeginDateMerit = dtBeginMerit.Value;
+            _EndDateMerit = dtEndMerit.Value;
+
+            _BeginDateDermit = dtBeginDermit.Value;
+            _EndDateDermit = dtEndDermit.Value;
+
+            _BeginDateService = dtBeginService.Value;
+            _EndDateService = dtEndService.Value;
+
             // 檢查設定學年度學期與目前系統預設是否相同
             string s1 = cboSchoolYear.Text + cboSemester.Text;
             string s2 = School.DefaultSchoolYear + School.DefaultSemester;
@@ -535,5 +567,79 @@ namespace SH_SemesterScoreReportFixed
 
             SaveTemplate(null, null);
         }
+
+        /// <summary>
+        /// 取得畫面上開始日期(缺曠)
+        /// </summary>
+        /// <returns></returns>
+        public DateTime GetBeginDateAttend()
+        {
+            return _BeginDateAttend;
+        }
+
+        /// <summary>
+        /// 取得畫面上結束日期(缺曠)
+        /// </summary>
+        /// <returns></returns>
+        public DateTime GetEndDateAttend()
+        {
+            return _EndDateAttend;
+        }
+
+        /// <summary>
+        /// 取得畫面上開始日期(獎)
+        /// </summary>
+        /// <returns></returns>
+        public DateTime GetBeginDateMerit()
+        {
+            return _BeginDateMerit;
+        }
+
+        /// <summary>
+        /// 取得畫面上結束日期(獎)
+        /// </summary>
+        /// <returns></returns>
+        public DateTime GetEndDateMerit()
+        {
+            return _EndDateMerit;
+        }
+
+        /// <summary>
+        /// 取得畫面上開始日期(康橋懲戒)
+        /// </summary>
+        /// <returns></returns>
+        public DateTime GetBeginDateDermit()
+        {
+            return _BeginDateDermit;
+        }
+
+        /// <summary>
+        /// 取得畫面上結束日期(康橋懲戒)
+        /// </summary>
+        /// <returns></returns>
+        public DateTime GetEndDateDermit()
+        {
+            return _EndDateDermit;
+        }
+
+        /// <summary>
+        /// 取得畫面上開始日期(服務學習)
+        /// </summary>
+        /// <returns></returns>
+        public DateTime GetBeginDateSevice()
+        {
+            return _BeginDateService;
+        }
+
+        /// <summary>
+        /// 取得畫面上結束日期(服務學習)
+        /// </summary>
+        /// <returns></returns>
+        public DateTime GetEndDateSevice()
+        {
+            return _EndDateService;
+        }
+
+
     }
 }

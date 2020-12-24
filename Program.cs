@@ -490,6 +490,18 @@ namespace SH_SemesterScoreReportFixed
                 table.Columns.Add("學年德行成績");
                 table.Columns.Add("學年學業成績班排名");
 
+
+                // 上面是舊日期，現在時間區段拆成四種                
+                table.Columns.Add("缺曠區間開始日期");
+                table.Columns.Add("缺曠區間結束日期");
+
+                table.Columns.Add("獎勵區間開始日期");
+                table.Columns.Add("獎勵區間結束日期");
+                table.Columns.Add("康橋懲戒區間開始日期");
+                table.Columns.Add("康橋懲戒區間結束日期");
+                table.Columns.Add("服務學習區間開始日期");
+                table.Columns.Add("服務學習區間結束日期");
+
                 // 服務學習時數
                 table.Columns.Add("前學期服務學習時數");
                 table.Columns.Add("本學期服務學習時數");
@@ -3281,6 +3293,19 @@ namespace SH_SemesterScoreReportFixed
                                 }
                             }
                             #endregion
+
+                            // 上面是舊寫法，現在時間區段 按照缺曠、獎、康橋懲戒、服務學習 拆開來
+                            row["缺曠區間開始日期"] = form.GetBeginDateAttend().ToShortDateString();
+                            row["缺曠區間結束日期"] = form.GetEndDateAttend().ToShortDateString();
+
+                            row["獎勵區間開始日期"] = form.GetBeginDateMerit().ToShortDateString();
+                            row["獎勵區間結束日期"] = form.GetEndDateMerit().ToShortDateString();
+                            row["康橋懲戒區間開始日期"] = form.GetBeginDateDermit().ToShortDateString();
+                            row["康橋懲戒區間結束日期"] = form.GetEndDateDermit().ToShortDateString();
+                            row["服務學習區間開始日期"] = form.GetBeginDateSevice().ToShortDateString();
+                            row["服務學習區間結束日期"] = form.GetEndDateSevice().ToShortDateString();
+
+
                             #region 獎懲統計
                             int 大功 = 0;
                             int 小功 = 0;
