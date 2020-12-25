@@ -131,6 +131,9 @@
       <DependentUpon>ConfigForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Configure.cs" />
+    <Compile Include="DAO\UDT_KCBSDermit.cs" />
+    <Compile Include="DAO\UDT_KCBSDermitComparison.cs" />
+    <Compile Include="KCBSDermitManager.cs" />
     <Compile Include="NewConfigure.cs">
       <SubType>Form</SubType>
     </Compile>

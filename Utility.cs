@@ -62,6 +62,160 @@ namespace SH_SemesterScoreReportFixed
             return retVal;
         }
 
+        /// <summary>
+        /// 透過日期區間取得獎懲資料,傳入學生ID,開始日期,結束日期,回傳：學生ID,獎懲統計名稱,統計值
+        /// </summary>
+        /// <returns></returns>
+        public static Dictionary<string, Dictionary<string, int>> GetDisciplineCountByDate(List<string> StudentIDList, DateTime beginDate, DateTime endDate)
+        {
+            Dictionary<string, Dictionary<string, int>> retVal = new Dictionary<string, Dictionary<string, int>>();
+
+            List<string> nameList = new string[] { "大功", "小功", "嘉獎", "大過", "小過", "警告", "留校" }.ToList();
+
+            // 取得獎懲資料
+            List<DisciplineRecord> dataList = Discipline.SelectByStudentIDs(StudentIDList);
+
+            foreach (DisciplineRecord data in dataList)
+            {
+                if (data.OccurDate >= beginDate && data.OccurDate <= endDate)
+                {
+                    // 初始化
+                    if (!retVal.ContainsKey(data.RefStudentID))
+                    {
+                        retVal.Add(data.RefStudentID, new Dictionary<string, int>());
+                        foreach (string str in nameList)
+                            retVal[data.RefStudentID].Add(str, 0);
+                    }
+
+                    // 獎勵
+                    if (data.MeritFlag == "1")
+                    {
+                        if (data.MeritA.HasValue)
+                            retVal[data.RefStudentID]["大功"] += data.MeritA.Value;
+
+                        if (data.MeritB.HasValue)
+                            retVal[data.RefStudentID]["小功"] += data.MeritB.Value;
+
+                        if (data.MeritC.HasValue)
+                            retVal[data.RefStudentID]["嘉獎"] += data.MeritC.Value;
+                    }
+                    else if (data.MeritFlag == "0")
+                    { // 懲戒
+                        if (data.Cleared != "是")
+                        {
+                            if (data.DemeritA.HasValue)
+                                retVal[data.RefStudentID]["大過"] += data.DemeritA.Value;
+
+                            if (data.DemeritB.HasValue)
+                                retVal[data.RefStudentID]["小過"] += data.DemeritB.Value;
+
+                            if (data.DemeritC.HasValue)
+                                retVal[data.RefStudentID]["警告"] += data.DemeritC.Value;
+                        }
+                    }
+                    else if (data.MeritFlag == "2")
+                    {
+                        // 留校察看
+                        retVal[data.RefStudentID]["留校"]++;
+                    }
+                }
+            }
+            return retVal;
+        }
+
+
+        static Dictionary<string, decimal> ServiceLearningByDateDict = new Dictionary<string, decimal>();
+        static Dictionary<string, decimal> ServiceLearningBySemesterDict = new Dictionary<string, decimal>();
+
+        /// <summary>
+        /// 服務學習時數加總
+        /// </summary>
+        public static void SetServiceLearningSum(List<string> StudentIDList, DateTime beginDate, DateTime endDate, string SchoolYear, string Semester)
+        {
+            ServiceLearningByDateDict.Clear();
+            ServiceLearningBySemesterDict.Clear();
+
+            // 沒有學生不處理
+            if (StudentIDList.Count == 0)
+                return;
+
+            // 依日期區間
+            QueryHelper qh = new QueryHelper();
+            string query1 = "SELECT " +
+                "ref_student_id AS student_id" +
+                ",hours " +
+                "FROM $k12.service.learning.record " +
+                "WHERE ref_student_id " +
+                "IN('" + string.Join("','", StudentIDList.ToArray()) + "') " +
+                "AND occur_date >='" + beginDate.ToShortDateString() + "' " +
+                "AND occur_date <='" + endDate.ToShortDateString() + "' " +
+                "ORDER BY ref_student_id;";
+
+            DataTable dt1 = qh.Select(query1);
+            if (dt1 != null)
+            {
+                foreach (DataRow dr in dt1.Rows)
+                {
+                    string sid = dr["student_id"].ToString();
+                    if (!ServiceLearningByDateDict.ContainsKey(sid))
+                        ServiceLearningByDateDict.Add(sid, 0);
+
+                    decimal d1;
+                    if (dr["hours"] != null)
+                    {
+                        if (decimal.TryParse(dr["hours"].ToString(), out d1))
+                        {
+                            ServiceLearningByDateDict[sid] += d1;
+                        }
+                    }
+
+                }
+            }
+
+            // 依學年度學期
+            string query2 = "SELECT " +
+              "ref_student_id AS student_id" +
+              ",hours " +
+              "FROM $k12.service.learning.record " +
+              "WHERE ref_student_id " +
+              "IN('" + string.Join("','", StudentIDList.ToArray()) + "') " +
+              "AND school_year=" + SchoolYear +
+              "AND semester =" + Semester +
+              "ORDER BY ref_student_id;";
+
+            DataTable dt2 = qh.Select(query2);
+            if (dt2 != null)
+            {
+                foreach (DataRow dr in dt2.Rows)
+                {
+                    string sid = dr["student_id"].ToString();
+                    if (!ServiceLearningBySemesterDict.ContainsKey(sid))
+                        ServiceLearningBySemesterDict.Add(sid, 0);
+
+                    decimal d1;
+                    if (dr["hours"] != null)
+                    {
+                        if (decimal.TryParse(dr["hours"].ToString(), out d1))
+                        {
+                            ServiceLearningBySemesterDict[sid] += d1;
+                        }
+                    }
+                }
+            }
+        }
+
+        public static Dictionary<string, decimal> GetServiceLearningByDateDict()
+        {
+            return Utility.ServiceLearningByDateDict;
+        }
+
+        public static Dictionary<string, decimal> GetServiceLearningBySemesterDict()
+        {
+            return Utility.ServiceLearningBySemesterDict;
+        }
+
+
+
 
         /// <summary>
         /// 取得學生分項成績(學業、體育、國防通識、健康與護理、實習科目、德行)

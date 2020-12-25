@@ -110,6 +110,7 @@ namespace SH_SemesterScoreReportFixed
 
         static void Program_Click(object sender_, EventArgs e_)
         {
+            KCBSDermitManager kmanager;
             AccessHelper helper = new AccessHelper();
             List<StudentRecord> lista = helper.StudentHelper.GetSelectedStudent();
 
@@ -120,9 +121,9 @@ namespace SH_SemesterScoreReportFixed
             ConfigForm form = new ConfigForm();
             if (form.ShowDialog() == DialogResult.OK)
             {
+                // 專處理康橋客製報表多的東西
+                kmanager = new KCBSDermitManager(form.GetBeginDateDermit(), form.GetEndDateDermit());
                 AccessHelper accessHelper = new AccessHelper();
-
-
                 //return;
                 List<StudentRecord> overflowRecords = new List<StudentRecord>();
                 //取得列印設定
@@ -502,6 +503,20 @@ namespace SH_SemesterScoreReportFixed
                 table.Columns.Add("服務學習區間開始日期");
                 table.Columns.Add("服務學習區間結束日期");
 
+                table.Columns.Add("大功區間統計");
+                table.Columns.Add("小功區間統計");
+                table.Columns.Add("嘉獎區間統計");
+                table.Columns.Add("大過區間統計");
+                table.Columns.Add("小過區間統計");
+                table.Columns.Add("警告區間統計");
+                table.Columns.Add("留校察看區間");
+
+                // 新增服務學習欄位
+                table.Columns.Add("服務學習區間加總");
+
+                //幫補StudentID (原本的報表沒有)
+                table.Columns.Add("StudentID");
+
                 // 服務學習時數
                 table.Columns.Add("前學期服務學習時數");
                 table.Columns.Add("本學期服務學習時數");
@@ -562,6 +577,10 @@ namespace SH_SemesterScoreReportFixed
                         table.Columns.Add("學期" + name + "(原始)成績類別2排名" + "_" + item2);
                     }
                 }
+
+
+                // 傳回康橋專有的表
+                table = kmanager.NewKCBSTable(table);
 
                 #endregion
                 //宣告產生的報表
@@ -1095,6 +1114,15 @@ namespace SH_SemesterScoreReportFixed
                         // 取得區間缺曠
                         Dictionary<string, Dictionary<string, int>> AttendanceCountDictBetween = Utility.GetAttendanceCountByDate(StudRecList, form.GetBeginDateAttend(), form.GetEndDateAttend());
 
+                        // 取得區間獎懲
+                        Dictionary<string, Dictionary<string, int>> DisciplineCountDictBetween = Utility.GetDisciplineCountByDate(StudIDList, form.GetBeginDateMerit(), form.GetEndDateMerit());
+
+                        // 取得服務學習加總
+                        Utility.SetServiceLearningSum(StudIDList, form.GetBeginDateSevice(), form.GetEndDateSevice(), conf.SchoolYear, conf.Semester);
+
+                        Dictionary<string, decimal> ServiceLearningByDateDictSum = Utility.GetServiceLearningByDateDict();
+
+
                         List<K12.Data.PeriodMappingInfo> PeriodMappingList = K12.Data.PeriodMapping.SelectAll();
                         // 節次>類別
                         Dictionary<string, string> PeriodMappingDict = new Dictionary<string, string>();
@@ -1103,6 +1131,9 @@ namespace SH_SemesterScoreReportFixed
                             if (!PeriodMappingDict.ContainsKey(rec.Name))
                                 PeriodMappingDict.Add(rec.Name, rec.Type);
                         }
+
+                        // 取得康橋獎懲紀錄
+                        kmanager.GetKCBSDermit(StudIDList);
 
                         bkw.ReportProgress(70);
                         elseReady.WaitOne();
@@ -1190,18 +1221,7 @@ namespace SH_SemesterScoreReportFixed
                                         row[keyS] = data.Value;
                                 }
                             }
-
-                            // 處理區間缺曠
-                            if (AttendanceCountDictBetween.ContainsKey(studentID))
-                            {
-                                foreach (KeyValuePair<string, int> data in AttendanceCountDictBetween[studentID])
-                                {
-                                    if (table.Columns.Contains(data.Key))
-                                        row[data.Key] = data.Value;
-                                }
-                            }
-
-
+                          
                             if (AttendanceCountDict1.ContainsKey(studentID))
                             {
                                 foreach (KeyValuePair<string, int> data in AttendanceCountDict1[studentID])
@@ -3323,7 +3343,51 @@ namespace SH_SemesterScoreReportFixed
                             // 2020/12/24 應應康橋客製，所有學務資料皆為設定區間統計
                             #region 區間統計
 
-   
+                            // 處理區間缺曠
+                            if (AttendanceCountDictBetween.ContainsKey(studentID))
+                            {
+                                foreach (KeyValuePair<string, int> data in AttendanceCountDictBetween[studentID])
+                                {
+                                    if (table.Columns.Contains(data.Key))
+                                        row[data.Key] = data.Value;
+                                }
+                            }
+
+                            // 處理區間獎懲
+                            if (DisciplineCountDictBetween.ContainsKey(studentID))
+                            {
+                                foreach (KeyValuePair<string, int> data in DisciplineCountDictBetween[studentID])
+                                {
+                                    switch (data.Key)
+                                    {
+                                        case "大功": row["大功區間統計"] = data.Value; break;
+                                        case "小功": row["小功區間統計"] = data.Value; break;
+                                        case "嘉獎": row["嘉獎區間統計"] = data.Value; break;
+                                        case "大過": row["大過區間統計"] = data.Value; break;
+                                        case "小過": row["小過區間統計"] = data.Value; break;
+                                        case "警告": row["警告區間統計"] = data.Value; break;
+
+                                        case "留校":
+                                            if (data.Value > 0)
+                                                row["留校察看區間"] = "是";
+                                            else
+                                                row["留校察看區間"] = "";
+                                            break;
+                                    }
+                                }
+                            }
+
+                            // 處理區間服務學習欄位
+                            if (ServiceLearningByDateDictSum.ContainsKey(studentID))
+                            {
+                                row["服務學習區間加總"] = ServiceLearningByDateDictSum[studentID];
+                            }
+
+                            #region 康橋懲戒
+                            // 加入康橋的ROW 內容
+                            row["StudentID"] = "" + stuRec.StudentID;
+                            row = kmanager.NewKCBSROW(row);
+                            #endregion
 
 
                             #endregion
