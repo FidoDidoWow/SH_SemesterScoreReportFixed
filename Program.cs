@@ -18,6 +18,13 @@ namespace SH_SemesterScoreReportFixed
         [FISCA.MainMethod]
         public static void Main()
         {
+            // 先初始化
+            FISCA.UDT.AccessHelper _AccessHelper = new FISCA.UDT.AccessHelper();
+
+            List<DAO.UDT_KCBSDermit> retVal1 = _AccessHelper.Select<DAO.UDT_KCBSDermit>();
+            List<DAO.UDT_KCBSDermitComparison> retVal2 = _AccessHelper.Select<DAO.UDT_KCBSDermitComparison>();
+            List<DAO.UDT_finalTotalKCBSDermit> retVal3 = _AccessHelper.Select<DAO.UDT_finalTotalKCBSDermit>();
+
             var btn = K12.Presentation.NLDPanels.Student.RibbonBarItems["資料統計"]["報表"]["成績相關報表"]["成績通知單(康橋)"]["期末成績通知單(固定排名)(康橋懲戒)"];
             btn.Enable = false;
             K12.Presentation.NLDPanels.Student.SelectedSourceChanged += delegate
