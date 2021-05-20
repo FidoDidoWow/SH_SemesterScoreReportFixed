@@ -8,4 +8,3 @@ C:\Users\ED\Documents\ischool_Github\SH_SemesterScoreReportFixed\obj\Debug\SH_Se
 C:\Users\ED\Documents\ischool_Github\SH_SemesterScoreReportFixed\obj\Debug\SH_SemesterScoreReportFixed_KCBS.csproj.CoreCompileInputs.cache
 C:\Users\ED\Documents\ischool_Github\SH_SemesterScoreReportFixed\obj\Debug\SH_SemesterScoreReportFixed_KCBS.dll
 C:\Users\ED\Documents\ischool_Github\SH_SemesterScoreReportFixed\obj\Debug\SH_SemesterScoreReportFixed_KCBS.pdb
-C:\Users\ED\Documents\ischool_Github\SH_SemesterScoreReportFixed\obj\Debug\SH_SemesterScoreReportFixed_KCBS.csprojAssemblyReference.cache
